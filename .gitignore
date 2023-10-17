@@ -1,0 +1,7 @@
+*.out
+*.bak
+.vscode/
+.idea/
+log/
+log.txt
+*.log
