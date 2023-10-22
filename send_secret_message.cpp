@@ -11,8 +11,6 @@ struct zip{
     vector<int> help_array;
 };
 
-int glob = 0;
-
 string getting_input(){
     string input;
     cin >> input;
