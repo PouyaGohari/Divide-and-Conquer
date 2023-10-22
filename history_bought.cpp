@@ -23,52 +23,44 @@ vector<vector<int>> getting_input(){
 }
 
 void merge_tool(vector<int> acc1, vector<int> acc2, vector<int>& acc){
-    vector<int> result = acc1;
-    result.insert(result.end(), acc2.begin(), acc2.end());
-    acc = result;
-    int first_pos = 0;
-    int second_pos = acc1.size();
-    int last_index = result.size() - 1;
-    int first_index = 0;
-    int mid_index = acc1.size() - 1;
-    for(int i = 0; i < last_index - first_index + 1; i++){
-        if(first_pos < mid_index + 1 && second_pos < last_index + 1){
-            if(result[first_pos] < result[second_pos]){
-                acc[i + first_index] = result[first_pos];
-                first_pos ++;
+    int x = 0;
+    int y = 0;
+    for(int i = 0; i < acc1.size() + acc2.size(); i++){
+        if(x < acc1.size() && y < acc2.size()){
+            if(acc1[x] < acc2[y]){
+                acc.push_back(acc1[x]);
+                x++;
                 continue;
             }
             else{
-                acc[i + first_index] = result[second_pos];
-                second_pos ++;
+                acc.push_back(acc2[y]);
+                y++;
                 continue;
             }
         }
-        else if(first_pos == mid_index + 1 && second_pos < last_index + 1){
-            acc[i + first_index] = result[second_pos];
-            second_pos ++;
+        else if(x == acc1.size() && y < acc2.size()){
+            acc.push_back(acc2[y]);
+            y++;
             continue;
         }
-        else if(first_pos < mid_index + 1 && second_pos == last_index + 1){
-            acc[i + first_index] = result[first_pos];
-            first_pos ++;
+        else if(x < acc1.size() && y == acc2.size()){
+            acc.push_back(acc1[x]);
+            x++;
             continue;
         }
     }
 }
 
-void merge(vector<vector<int>> arrays, vector<int>& acc){
-    if(arrays.size() == 1){
-        acc = arrays[0];
+void merge(vector<vector<int>> arrays, int first_index, int last_index ,vector<int>& acc){
+    if(first_index == last_index){
+        acc = arrays[first_index];
         return;
     }
-    int mid = arrays.size()/2;
-    vector<vector<int>> first_half(arrays.begin(), arrays.begin() + mid);
-    vector<vector<int>> second_half(arrays.begin() + mid, arrays.end());
+    int mid = (first_index + last_index)/2;
     vector<int> acc1;
     vector<int> acc2;
-    merge(first_half, acc1);
-    merge(second_half, acc2);
+    merge(arrays, first_index, mid ,acc1);
+    merge(arrays, mid + 1, last_index, acc2);
     merge_tool(acc1, acc2, acc);
 }
 
@@ -82,7 +74,7 @@ void print_vec(vector<int> acc){
 int main(){
     vector<vector<int>> numbers = getting_input();
     vector<int> acc;
-    merge(numbers, acc);
+    merge(numbers, 0, numbers.size() - 1, acc);
     print_vec(acc);
     return 0;
 }
