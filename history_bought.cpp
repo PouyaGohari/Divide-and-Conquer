@@ -51,7 +51,7 @@ void merge_tool(vector<int> acc1, vector<int> acc2, vector<int>& acc){
     }
 }
 
-void merge(vector<vector<int>> arrays, int first_index, int last_index ,vector<int>& acc){
+void merge(vector<vector<int>> arrays, int first_index, int last_index, vector<int>& acc){
     if(first_index == last_index){
         acc = arrays[first_index];
         return;
