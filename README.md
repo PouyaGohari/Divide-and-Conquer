@@ -1,2 +1,2 @@
 # Divide-and-Conquer
-Three different questions solved with devide and conquer
+Three different questions solved with divide and conquer
