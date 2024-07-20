@@ -1,6 +1,4 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -72,33 +70,38 @@ int finding_piviot(vector<int> help, int first_index, int last_index){
     return last_index;
 }
 
-void max_sub_string(string input, vector<int> help, int first_index, int last_index, string& acc){
+string max_sub_string(string input, vector<int> help, int first_index, int last_index){
     if(first_index >= last_index){
-        acc = "";
-        return;
+        return "";
     }
     if(whole_are_one(help, first_index, last_index)){
         zip temp = find_acc(input, help, first_index, last_index);
         if(temp.equal_array){
-            acc = input.substr(first_index, last_index - first_index + 1);
-            return;
+            return input.substr(first_index, last_index - first_index + 1);
         }
         else{
-            max_sub_string(input.substr(first_index, last_index-first_index+1), temp.help_array, 0, temp.help_array.size()-1, acc);
+            int piviot = finding_piviot(temp.help_array, 0, temp.help_array.size()-1);
+            string acc_left = max_sub_string(input.substr(first_index, last_index-first_index+1), temp.help_array, 0, piviot-1);
+            string acc_right = max_sub_string(input.substr(first_index, last_index-first_index+1), temp.help_array, piviot + 1, temp.help_array.size()-1);
+            if(acc_left.size() >= acc_right.size()){
+                return acc_left;
+            }
+            else{
+                return acc_right;
+            }
         }
     }
-    int piviot = finding_piviot(help, first_index, last_index);
+    int piviot = finding_piviot(help, first_index, last_index); 
     if(piviot == last_index && help[last_index] == 1){
-        return;
+        return "";
     }
-    string acc_left, acc_right;
-    max_sub_string(input, help, first_index,piviot - 1, acc_left);
-    max_sub_string(input, help, piviot + 1, last_index,acc_right);
+    string acc_left = max_sub_string(input, help, first_index,piviot - 1);
+    string acc_right = max_sub_string(input, help, piviot + 1, last_index);
     if(acc_left.size() >= acc_right.size()){
-        acc = acc_left;
+        return acc_left;
     }
     else{
-        acc = acc_right;
+        return acc_right;
     }
 }
 
@@ -106,8 +109,7 @@ int main(){
     string input = getting_input();
     vector<int> dict_array = dictionary(input);
     vector<int> helping_array = help_array(input, dict_array);
-    string acc;
-    max_sub_string(input, helping_array, 0, input.size()-1, acc);
+    string acc =  max_sub_string(input, helping_array, 0, input.size()-1);
     cout << acc << endl;
     return 0;
 }
